@@ -14,7 +14,7 @@ members = ["api","kernel","adapter","shared","registry"]
 adapter = { path = "./adapter" }
 api = { path = "./api" }
 kernel = { path = "./kernel" }
-shared = { path = "./path" }
+shared = { path = "./shared" }
 registry = { path = "./registry" }
 anyhow = "1.0.75"
 axum = { version = "0.7.5", features = ["macros"] }
@@ -27,7 +27,6 @@ adapter.workspace = true
 api.workspace = true
 registry.workspace = true
 shared.workspace = true
-anyhow.workspace = true
 anyhow.workspace = true
 tokio.workspace = true
 axum.workspace = true
