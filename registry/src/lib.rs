@@ -5,7 +5,7 @@ use kernel::repository::health::HealthCheckRepository;
 
 #[derive(Clone)]
 pub struct AppRegistry {
-    health_check_repository: Arc<HealthCheckRepositoryImpl>,
+    health_check_repository: Arc<dyn HealthCheckRepository>,
 }
 
 impl AppRegistry {
@@ -16,7 +16,7 @@ impl AppRegistry {
         }
     }
 
-    pub fn health_check_repository(&self) -> Arc<HealthCheckRepositoryImpl> {
+    pub fn health_check_repository(&self) -> Arc<dyn HealthCheckRepository> {
         self.health_check_repository.clone()
     }
 }

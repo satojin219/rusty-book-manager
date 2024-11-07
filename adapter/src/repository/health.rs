@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use derive_new::new;
-use kernel::repository::HealthCheckRepository;
+use kernel::repository::health::HealthCheckRepository;
 
 use crate::database::ConnectionPool;
 
