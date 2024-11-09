@@ -15,7 +15,6 @@ CREATE TABLE
     author VARCHAR(255) NOT NULL,
     isbn VARCHAR(255) NOT NULL,
     description VARCHAR(1024) NOT NULL,
-    user_id UUID NOT NULL, -- この行を追加
     created_at TIMESTAMP(3)
     WITH
       TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
