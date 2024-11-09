@@ -13,8 +13,12 @@ fn make_pg_connect_options(cfg: &DatabaseConfig) -> PgConnectOptions {
 
 #[derive(Clone)]
 pub struct ConnectionPool(PgPool);
+pub mod model;
 
 impl ConnectionPool {
+    pub fn new(pool: PgPool) -> Self {
+        Self(pool)
+    }
     //sqlx::PgPoolへの参照を取得する
     pub fn inner_ref(&self) -> &PgPool {
         &self.0

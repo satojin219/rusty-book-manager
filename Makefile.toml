@@ -12,6 +12,7 @@ DATABASE_PORT_INNER = 5432
 REDIS_PORT_OUTER = 6379
 REDIS_PORT_INNER = 6379
 AUTH_TOKEN_TTL = 86400
+DATABASE_URL = "postgres://app:passwd@localhost:5432/app"
 
 # Docker Composeのネットワーク内でのDB等への接続情報
 [tasks.set-env-docker.env]

@@ -12,6 +12,7 @@ dependencies = [
  "kernel",
  "shared",
  "sqlx",
+ "uuid",
 ]
 
 [[package]]
