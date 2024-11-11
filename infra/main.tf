@@ -21,7 +21,7 @@ terraform {
   backend "s3" {
     # この「bucket」部分はご自身のS3バケット名を必ず命名してください。
     # S3バケット名はAWSグローバルで一意でなければなりません。
-    bucket = "<your-tf-state-bucket>"
+    bucket = "rusty-book-packet"
     region  = "ap-northeast-1"
     profile = "oxidized-crab"
     key     = "bookmanager.tfstate"
