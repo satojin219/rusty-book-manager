@@ -65,3 +65,4 @@ pub async fn show_book(
         })
         .map_err(AppError::from)
 }
+
