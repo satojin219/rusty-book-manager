@@ -41,7 +41,6 @@ fn init_logger() -> Result<()> {
         .with_line_number(true)
         .with_target(false);
 
-    
     tracing_subscriber::registry()
         .with(subscriber)
         .with(env_filter)
