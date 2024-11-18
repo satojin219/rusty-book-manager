@@ -10,6 +10,7 @@ dependencies = [
  "async-trait",
  "derive-new",
  "kernel",
+ "redis",
  "shared",
  "sqlx",
  "uuid",
