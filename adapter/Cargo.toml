@@ -12,3 +12,4 @@ anyhow.workspace = true
 sqlx.workspace = true
 uuid.workspace = true
 redis.workspace = true
+bcrypt.workspace = true

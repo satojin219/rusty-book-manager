@@ -8,6 +8,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "bcrypt",
  "derive-new",
  "kernel",
  "redis",
@@ -99,11 +100,13 @@ dependencies = [
  "serde_json",
  "shared",
  "strum",
+ "thiserror",
  "tokio",
  "tokio-stream",
  "tower 0.4.13",
  "tracing",
  "utoipa",
+ "uuid",
 ]
 
 [[package]]
