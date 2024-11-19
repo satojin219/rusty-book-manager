@@ -1,6 +1,5 @@
 use async_trait::async_trait;
 use shared::error::AppResult;
-use uuid::Uuid;
 
 use crate::model::{
     book::{event::CreateBook, Book},

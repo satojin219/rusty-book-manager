@@ -21,6 +21,8 @@ strum.workspace = true
 axum-extra.workspace = true
 tokio-stream.workspace = true
 garde.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
 
 [dev-dependencies]
 anyhow.workspace = true

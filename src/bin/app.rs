@@ -3,7 +3,7 @@ use std::net::{Ipv4Addr, SocketAddr};
 use adapter::database::connect_database_with;
 use axum::Router;
 
-use anyhow::{Context, Error, Result};
+use anyhow::{Context, Result};
 use registry::AppRegistry;
 use shared::config::AppConfig;
 use shared::env::{which, Environment};
@@ -11,13 +11,12 @@ use tokio::net::TcpListener;
 
 use api::route::{book::build_book_routers, health::build_health_check_routers};
 
-use tower_http::LatencyUnit;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::EnvFilter;
 
-use tower::http::LatencyUnit;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
+use tower_http::LatencyUnit;
 use tracing::Level;
 
 #[tokio::main]
@@ -56,7 +55,6 @@ async fn bootstrap() -> Result<()> {
     let app = Router::new()
         .merge(build_health_check_routers())
         .merge(build_book_routers())
-        .layer(cors())
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
