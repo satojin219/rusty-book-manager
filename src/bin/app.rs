@@ -1,6 +1,5 @@
 use std::net::{Ipv4Addr, SocketAddr};
 
-use adapter::database::connect_database_with;
 use axum::Router;
 
 use anyhow::{Context, Result};
