@@ -3,6 +3,7 @@ use std::sync::Arc;
 use adapter::redis::RedisClient;
 use adapter::repository::auth::AuthRepositoryImpl;
 use adapter::repository::book::BookRepositoryImpl;
+use adapter::repository::user::UserRepositoryImpl;
 use adapter::{database::ConnectionPool, repository::health::HealthCheckRepositoryImpl};
 use kernel::repository::auth::AuthRepository;
 use kernel::repository::book::BookRepository;

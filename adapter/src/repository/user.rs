@@ -31,6 +31,7 @@ impl UserRepository for UserRepositoryImpl {
         .fetch_optional(self.db.inner_ref())
         .await
         .map_err(AppError::SpecificOperationError)?;
+
         match row {
             Some(r) => Ok(Some(User::try_from(r)?)),
             None => Ok(None),
@@ -49,6 +50,6 @@ impl UserRepository for UserRepositoryImpl {
         todo!()
     }
     async fn delete(&self, event: DeleteUser) -> AppResult<()> {
-      
+        todo!()
     }
 }
