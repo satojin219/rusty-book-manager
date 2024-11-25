@@ -11,9 +11,8 @@ use shared::error::{AppError, AppResult};
 use crate::{
     extractor::AuthorizedUser,
     model::user::{
-        CreateUserRequest, UpdateUserPasswordRequest, UpdateUserRoleRequest,
-        UpdateUserRoleRequestWithUserId, UpdateUserRoleRequestWithUserId, UserResponse,
-        UsersResponse,
+        CreateUserRequest, UpdateUserPasswordRequest, UpdateUserPasswordRequestWithUserId,
+        UpdateUserRoleRequest, UpdateUserRoleRequestWithUserId, UserResponse, UsersResponse,
     },
 };
 
@@ -21,7 +20,7 @@ pub async fn register_user(
     user: AuthorizedUser,
     State(registry): State<AppRegistry>,
     Json(req): Json<CreateUserRequest>,
-) -> AppResult<Json<CreateUserRequest>> {
+) -> AppResult<Json<UserResponse>> {
     if !user.is_admin() {
         return Err(AppError::ForbiddenOperation);
     }
@@ -36,7 +35,8 @@ pub async fn list_users(
     _user: AuthorizedUser,
     State(registry): State<AppRegistry>,
 ) -> AppResult<Json<UsersResponse>> {
-    let item = registry
+    let items = registry
+        .user_repository()
         .find_all()
         .await?
         .into_iter()
@@ -48,7 +48,7 @@ pub async fn list_users(
 
 pub async fn delete_user(
     user: AuthorizedUser,
-    Paht(user_id): Path<UserId>,
+    Path(user_id): Path<UserId>,
     State(registry): State<AppRegistry>,
 ) -> AppResult<StatusCode> {
     if !user.is_admin() {
@@ -74,7 +74,7 @@ pub async fn change_role(
     }
     registry
         .user_repository()
-        .update_role(UpdateUserRoleRequestWithUserId::new(user_id, request).into())
+        .update_role(UpdateUserRoleRequestWithUserId::new(user_id, req).into())
         .await?;
 
     Ok(StatusCode::OK)
@@ -92,7 +92,7 @@ pub async fn change_password(
     req.validate(&())?;
     registry
         .user_repository()
-        .update_password(UpdateUserPasswordRequestWithUserId::new(user_id(), req).into())
+        .update_password(UpdateUserPasswordRequestWithUserId::new(user.id(), req).into())
         .await?;
 
     Ok(StatusCode::OK)
