@@ -21,4 +21,3 @@ pub struct DeleteBook {
     pub book_id: BookId,
     pub requested_user: UserId,
 }
-

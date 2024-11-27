@@ -5,7 +5,7 @@ use shared::error::AppResult;
 
 use crate::{
     extractor::AuthorizedUser,
-    model::auth::{AccessTokenResponse,LoginRequest},
+    model::auth::{AccessTokenResponse, LoginRequest},
 };
 
 pub async fn login(
@@ -27,7 +27,10 @@ pub async fn login(
     }))
 }
 
-pub async fn logout(user: AuthorizedUser,State(registry): State<AppRegistry>) -> AppResult<StatusCode> {
+pub async fn logout(
+    user: AuthorizedUser,
+    State(registry): State<AppRegistry>,
+) -> AppResult<StatusCode> {
     registry
         .auth_repository()
         .delete_token(&user.access_token)

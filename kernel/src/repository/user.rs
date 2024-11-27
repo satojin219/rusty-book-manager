@@ -18,5 +18,3 @@ pub trait UserRepository: Send + Sync {
     async fn update_role(&self, event: UpdateUserRole) -> AppResult<()>;
     async fn delete(&self, event: DeleteUser) -> AppResult<()>;
 }
-
-
