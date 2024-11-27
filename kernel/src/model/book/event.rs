@@ -9,10 +9,10 @@ pub struct CreateBook {
 #[derive(Debug)]
 pub struct UpdateBook {
     pub book_id: BookId,
-    pub title: Option<String>,
-    pub author: Option<String>,
-    pub isbn: Option<String>,
-    pub description: Option<String>,
+    pub title: String,
+    pub author: String,
+    pub isbn: String,
+    pub description: String,
     pub requested_user: UserId,
 }
 
