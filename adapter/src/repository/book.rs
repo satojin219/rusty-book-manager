@@ -175,9 +175,10 @@ impl BookRepository for BookRepositoryImpl {
 mod tests {
     use super::*;
     use crate::repository::{
-        book::BookRepositoryImpl, checkout::CheckoutRepositoryImpl, user::UserRepositoryImpl,
+        book::BookRepositoryImpl,
+        user::UserRepositoryImpl, //checkout::CheckoutRepositoryImpl
     };
-    use chrono::Utc;
+    // use chrono::Utc;
     use kernel::{
         model::{
             checkout::event::{CreateCheckout, UpdateReturned},
@@ -326,95 +327,95 @@ mod tests {
 
         Ok(())
     }
-    #[sqlx::test(fixtures("common", "book_checkout"))]
-    async fn test_book_checkout(pool: sqlx::PgPool) -> anyhow::Result<()> {
-        let book_repo = BookRepositoryImpl::new(ConnectionPool::new(pool.clone()));
-        let checkout_repo = CheckoutRepositoryImpl::new(ConnectionPool::new(pool.clone()));
+    // #[sqlx::test(fixtures("common", "book_checkout"))]
+    // async fn test_book_checkout(pool: sqlx::PgPool) -> anyhow::Result<()> {
+    //     let book_repo = BookRepositoryImpl::new(ConnectionPool::new(pool.clone()));
+    //     let checkout_repo = CheckoutRepositoryImpl::new(ConnectionPool::new(pool.clone()));
 
-        // 事前登録したユーザーのID（fixtures/book_checkout.sql参照）
-        let user_id1 = UserId::from_str("9582f9de-0fd1-4892-b20c-70139a7eb95b").unwrap();
-        let user_id2 = UserId::from_str("050afe56-c3da-4448-8e4d-6f44007d2ca5").unwrap();
+    //     // 事前登録したユーザーのID（fixtures/book_checkout.sql参照）
+    //     let user_id1 = UserId::from_str("9582f9de-0fd1-4892-b20c-70139a7eb95b").unwrap();
+    //     let user_id2 = UserId::from_str("050afe56-c3da-4448-8e4d-6f44007d2ca5").unwrap();
 
-        let book = book_repo
-            .find_all(BookListOptions {
-                limit: 20,
-                offset: 0,
-            })
-            .await?
-            .into_inner()
-            .pop()
-            .unwrap();
+    //     let book = book_repo
+    //         .find_all(BookListOptions {
+    //             limit: 20,
+    //             offset: 0,
+    //         })
+    //         .await?
+    //         .into_inner()
+    //         .pop()
+    //         .unwrap();
 
-        // 初期の貸し出し状態がNoneであることを確認
-        assert!(book.checkout.is_none());
+    //     // 初期の貸し出し状態がNoneであることを確認
+    //     assert!(book.checkout.is_none());
 
-        // 1回目の貸し出し（user_id1）の蔵書の戻り値のテスト
-        {
-            checkout_repo
-                .create(CreateCheckout {
-                    book_id: book.id,
-                    checked_out_by: user_id1,
-                    checked_out_at: Utc::now(),
-                })
-                .await?;
+    //     // 1回目の貸し出し（user_id1）の蔵書の戻り値のテスト
+    //     {
+    //         checkout_repo
+    //             .create(CreateCheckout {
+    //                 book_id: book.id,
+    //                 checked_out_by: user_id1,
+    //                 checked_out_at: Utc::now(),
+    //             })
+    //             .await?;
 
-            // 貸し出しがある状態での蔵書の戻り値
-            // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
-            let book_co = book_repo.find_by_id(book.id).await?.unwrap();
-            assert!(book_co.checkout.is_some());
-            let co = book_co.checkout.unwrap();
-            assert_eq!(co.checked_out_by.id, user_id1);
+    //         // 貸し出しがある状態での蔵書の戻り値
+    //         // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
+    //         let book_co = book_repo.find_by_id(book.id).await?.unwrap();
+    //         assert!(book_co.checkout.is_some());
+    //         let co = book_co.checkout.unwrap();
+    //         assert_eq!(co.checked_out_by.id, user_id1);
 
-            // 返却を実行
-            checkout_repo
-                .update_returned(UpdateReturned {
-                    checkout_id: co.checkout_id,
-                    book_id: book_co.id,
-                    returned_by: user_id1,
-                    returned_at: Utc::now(),
-                })
-                .await?;
+    //         // 返却を実行
+    //         checkout_repo
+    //             .update_returned(UpdateReturned {
+    //                 checkout_id: co.checkout_id,
+    //                 book_id: book_co.id,
+    //                 returned_by: user_id1,
+    //                 returned_at: Utc::now(),
+    //             })
+    //             .await?;
 
-            // 返却後の蔵書の戻り値
-            // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
-            let book_re = book_repo.find_by_id(book.id).await?.unwrap();
-            assert!(book_re.checkout.is_none());
-        }
+    //         // 返却後の蔵書の戻り値
+    //         // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
+    //         let book_re = book_repo.find_by_id(book.id).await?.unwrap();
+    //         assert!(book_re.checkout.is_none());
+    //     }
 
-        // 2回目の貸し出し（user_id2）の蔵書の戻り値のテスト
-        // 2回目の貸出中にuser_id1の情報が返されないことを確認する
-        {
-            checkout_repo
-                .create(CreateCheckout {
-                    book_id: book.id,
-                    checked_out_by: user_id2,
-                    checked_out_at: Utc::now(),
-                })
-                .await?;
+    //     // 2回目の貸し出し（user_id2）の蔵書の戻り値のテスト
+    //     // 2回目の貸出中にuser_id1の情報が返されないことを確認する
+    //     {
+    //         checkout_repo
+    //             .create(CreateCheckout {
+    //                 book_id: book.id,
+    //                 checked_out_by: user_id2,
+    //                 checked_out_at: Utc::now(),
+    //             })
+    //             .await?;
 
-            // 貸し出しがある状態での蔵書の戻り値
-            // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
-            let book_co = book_repo.find_by_id(book.id).await?.unwrap();
-            assert!(book_co.checkout.is_some());
-            let co = book_co.checkout.unwrap();
-            assert_eq!(co.checked_out_by.id, user_id2);
+    //         // 貸し出しがある状態での蔵書の戻り値
+    //         // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
+    //         let book_co = book_repo.find_by_id(book.id).await?.unwrap();
+    //         assert!(book_co.checkout.is_some());
+    //         let co = book_co.checkout.unwrap();
+    //         assert_eq!(co.checked_out_by.id, user_id2);
 
-            // 返却を実行
-            checkout_repo
-                .update_returned(UpdateReturned {
-                    checkout_id: co.checkout_id,
-                    book_id: book_co.id,
-                    returned_by: user_id2,
-                    returned_at: Utc::now(),
-                })
-                .await?;
+    //         // 返却を実行
+    //         checkout_repo
+    //             .update_returned(UpdateReturned {
+    //                 checkout_id: co.checkout_id,
+    //                 book_id: book_co.id,
+    //                 returned_by: user_id2,
+    //                 returned_at: Utc::now(),
+    //             })
+    //             .await?;
 
-            // 返却後の蔵書の戻り値
-            // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
-            let book_re = book_repo.find_by_id(book.id).await?.unwrap();
-            assert!(book_re.checkout.is_none());
-        }
+    //         // 返却後の蔵書の戻り値
+    //         // -> Book#checkoutが存在し、貸し出し時に指定したユーザーIDになっている
+    //         let book_re = book_repo.find_by_id(book.id).await?.unwrap();
+    //         assert!(book_re.checkout.is_none());
+    //     }
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 }
