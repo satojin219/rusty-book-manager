@@ -8,6 +8,7 @@ use kernel::model::{id::UserId, user::event::DeleteUser};
 use registry::AppRegistry;
 use shared::error::{AppError, AppResult};
 
+use crate::model::checkout::CheckoutsResponse;
 use crate::{
     extractor::AuthorizedUser,
     model::user::{
@@ -96,4 +97,16 @@ pub async fn change_password(
         .await?;
 
     Ok(StatusCode::OK)
+}
+
+pub async fn get_chekouts(
+    user: AuthorizedUser,
+    State(registry): State<AppRegistry>,
+) -> AppResult<Json<CheckoutsResponse>> {
+    registry
+        .checkout_repository()
+        .find_unreturned_by_user_id(user.id())
+        .await
+        .map(CheckoutsResponse::from)
+        .map(Json)
 }
