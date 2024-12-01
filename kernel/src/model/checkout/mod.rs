@@ -14,7 +14,7 @@ pub struct Checkout {
 
 #[derive(Debug)]
 pub struct CheckoutBook {
-    pub id: BookId,
+    pub book_id: BookId,
     pub title: String,
     pub author: String,
     pub isbn: String,
